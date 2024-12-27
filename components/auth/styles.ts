@@ -1,0 +1,40 @@
+import { cva } from 'class-variance-authority';
+
+export const terminalInput = cva([
+  "w-full",
+  "bg-black/50",
+  "border",
+  "border-[#FF7300]/20",
+  "text-[#FF7300]",
+  "font-mono",
+  "uppercase",
+  "placeholder:text-[#FF7300]/30",
+  "focus:border-[#FF7300]",
+  "focus:ring-1",
+  "focus:ring-[#FF7300]",
+  "transition-all",
+  "duration-300",
+  "rounded-none",
+  "pl-10",
+  "py-3",
+]);
+
+export const terminalButton = cva([
+  "w-full",
+  "bg-black",
+  "border",
+  "border-[#FF7300]",
+  "text-[#FF7300]",
+  "font-mono",
+  "uppercase",
+  "py-3",
+  "hover:bg-[#FF7300]/10",
+  "transition-all",
+  "duration-300",
+  "flex",
+  "items-center",
+  "justify-center",
+  "gap-2",
+  "rounded-none",
+  "group",
+]);
