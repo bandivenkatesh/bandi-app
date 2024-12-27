@@ -1,45 +1,30 @@
-# Base image
-FROM node:18-alpine AS builder
-
-# Set working directory
+FROM node:18-alpine AS deps
 WORKDIR /app
-
-# Install dependencies
 COPY package*.json ./
 RUN npm ci
 
-# Copy project files
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Set up directories
-RUN mkdir -p public .next/static
-
-# Build the application
 RUN npm run build
 
-# Production image
 FROM node:18-alpine AS runner
-
-# Set working directory
 WORKDIR /app
 
-# Create necessary directories
-RUN mkdir -p public .next/static
+ENV NODE_ENV=production
 
-# Copy necessary files from builder
-COPY --from=builder /app/public/ ./public/ || true
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/.next ./.next/
-COPY --from=builder /app/node_modules ./node_modules/
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# Set environment variables
-ENV NODE_ENV=production \
-    PORT=3000 \
-    HOSTNAME=0.0.0.0
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
-# Expose port
+USER nextjs
+
 EXPOSE 3000
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
 
-# Start the application
-CMD ["npm", "start"]
+CMD ["node", "server.js"]

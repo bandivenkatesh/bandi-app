@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import { Award, Users, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AboutSection } from '@/components/sections/AboutSection';
+import Image from 'next/image';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -65,10 +66,11 @@ export default function RootLayout({
           {/* Features Section - keeping original size */}
           <section className="relative py-16 text-white">
             <div className="absolute inset-0 z-0">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1519083994092-4b1d44b3d2c3?auto=format&fit=crop&q=80"
                 alt="Performance Bike Background"
-                className="w-full h-full object-cover"
+                layout="fill"
+                objectFit="cover"
               />
               <div className="absolute inset-0 bg-gray-900/75" /> {/* Reduced from 85 to 75 */}
             </div>
@@ -85,10 +87,11 @@ export default function RootLayout({
           {/* Testimonials Section - keeping original size */}
           <section className="relative py-16 text-white">
             <div className="absolute inset-0 z-0">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80"
                 alt="Testimonials Background"
-                className="w-full h-full object-cover"
+                layout="fill"
+                objectFit="cover"
               />
               <div className="absolute inset-0 bg-black/65" />
             </div>
@@ -106,10 +109,11 @@ export default function RootLayout({
           {/* Get in Touch Section */}
           <section className="relative min-h-[800px] py-24 text-white">
             <div className="absolute inset-0 z-0">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80"
                 alt="Contact Background"
-                className="w-full h-full object-cover"
+                layout="fill"
+                objectFit="cover"
               />
               <div className="absolute inset-0 bg-black/75" />
             </div>

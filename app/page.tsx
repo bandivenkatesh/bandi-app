@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, Zap } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -15,7 +16,7 @@ export default function Home() {
           className="absolute inset-0 z-0 will-change-transform"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-transparent" />
-          <motion.img
+          <motion.div
             initial={{ scale: 1.2 }}
             animate={{ scale: 1 }}
             transition={{ duration: 1.5 }}
@@ -23,10 +24,15 @@ export default function Home() {
               y: "-10%",
               willChange: "transform"
             }}
-            src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80"
-            alt="Superbike Hero"
             className="w-full h-[120%] object-cover transform-gpu"
-          />
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80"
+              alt="Superbike Hero"
+              layout="fill"
+              objectFit="cover"
+            />
+          </motion.div>
         </motion.div>
         
         <motion.div 
