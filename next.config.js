@@ -1,10 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  images: { unoptimized: true },
-};
+    output: 'standalone',
+    experimental: {
+        appDir: true
+    },
+    async redirects() {
+        return [
+            {
+                source: '/auth/callback',
+                destination: '/',
+                permanent: false,
+            },
+        ]
+    }
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
