@@ -3,9 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X, Bike } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
-import { UserMenu } from '@/components/auth/UserMenu';
 import { cn } from '@/lib/utils';
+
+const UserMenu = dynamic(
+  () => import('@/components/auth/UserMenu').then(mod => mod.UserMenu),
+  { ssr: false }
+);
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
