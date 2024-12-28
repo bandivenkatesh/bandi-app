@@ -29,8 +29,9 @@ export default function Home() {
             <Image
               src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80"
               alt="Superbike Hero"
-              layout="fill"
-              objectFit="cover"
+              fill
+              className="object-cover"
+              priority
             />
           </motion.div>
         </motion.div>

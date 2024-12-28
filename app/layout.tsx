@@ -17,6 +17,23 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Bandi - New Superbike Generation',
   description: 'Experience the future of superbike booking with Bandi',
+  metadataBase: new URL('https://bandibikes.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'Bandi - New Superbike Generation',
+    description: 'Experience the future of superbike booking with Bandi',
+    type: 'website',
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -69,8 +86,9 @@ export default function RootLayout({
               <Image
                 src="https://images.unsplash.com/photo-1519083994092-4b1d44b3d2c3?auto=format&fit=crop&q=80"
                 alt="Performance Bike Background"
-                layout="fill"
-                objectFit="cover"
+                fill
+                className="object-cover"
+                priority
               />
               <div className="absolute inset-0 bg-gray-900/75" /> {/* Reduced from 85 to 75 */}
             </div>
@@ -90,8 +108,8 @@ export default function RootLayout({
               <Image
                 src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80"
                 alt="Testimonials Background"
-                layout="fill"
-                objectFit="cover"
+                fill
+                className="object-cover"
               />
               <div className="absolute inset-0 bg-black/65" />
             </div>
@@ -112,8 +130,8 @@ export default function RootLayout({
               <Image
                 src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80"
                 alt="Contact Background"
-                layout="fill"
-                objectFit="cover"
+                fill
+                className="object-cover"
               />
               <div className="absolute inset-0 bg-black/75" />
             </div>
