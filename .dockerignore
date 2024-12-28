@@ -10,3 +10,6 @@ Dockerfile
 .env.local
 .vscode
 *.log
+.env
+.env.*
+docker-compose.yml

@@ -8,8 +8,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Create public directory if it doesn't exist
-RUN mkdir -p public
+# Create public directory and ensure it exists with a .gitkeep file
+RUN mkdir -p public && touch public/.gitkeep
 
 # Add build-time variables
 ARG NEXT_PUBLIC_SUPABASE_URL
@@ -29,12 +29,12 @@ ENV NODE_ENV=production
 ENV NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/public ./public 2>/dev/null || :
+COPY --from=builder /app/public ./public
 
 RUN chown -R nextjs:nodejs .
 
