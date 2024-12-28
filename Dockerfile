@@ -8,6 +8,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Create public directory if it doesn't exist
+RUN mkdir -p public
+
 # Add build-time variables
 ARG NEXT_PUBLIC_SUPABASE_URL
 ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -31,7 +34,7 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/public ./public
+COPY --from=builder /app/public ./public 2>/dev/null || :
 
 RUN chown -R nextjs:nodejs .
 
