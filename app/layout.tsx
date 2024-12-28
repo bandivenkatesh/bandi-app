@@ -11,6 +11,7 @@ import { Award, Users, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AboutSection } from '@/components/sections/AboutSection';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -160,6 +161,13 @@ export default function RootLayout({
                     </a>
                   ))}
                 </div>
+              </div>
+              <div className="relative z-10 text-center mt-12">
+                <Link href="/book-test-ride">
+                  <Button className="bg-[#FF7300] hover:bg-[#FF7300]/90 transform-gpu transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#FF7300]/20">
+                    Book a Test Ride
+                  </Button>
+                </Link>
               </div>
             </div>
           </section>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { X, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from 'next/link';
 
 interface ThankYouModalProps {
   isOpen: boolean;
@@ -100,8 +101,11 @@ export function ThankYouModal({ isOpen, onClose }: ThankYouModalProps) {
                     <Button 
                       className="bg-[#FF7300] hover:bg-[#FF7300]/90 min-w-[100px]"
                       onClick={onClose}
+                      asChild
                     >
-                      Close
+                      <Link href="/book-test-ride">
+                        Book Now
+                      </Link>
                     </Button>
                   </motion.div>
                 </CardFooter>

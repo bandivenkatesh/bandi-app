@@ -4,6 +4,7 @@ import { BikeModel } from '@/types/bike';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { ChevronRight } from 'lucide-react';
 
 interface BikeCardProps {
   bike: BikeModel;
@@ -56,6 +57,7 @@ export function BikeCard({ bike }: BikeCardProps) {
             className="flex-1 border-[#FF7300] text-[#FF7300] hover:bg-[#FF7300] hover:text-white"
           >
             Book Test Ride
+            <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
       </div>

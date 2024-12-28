@@ -1,8 +1,9 @@
 "use client";
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ChevronRight, Zap } from 'lucide-react';
+import { ChevronRight, Zap, Send } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -68,14 +69,16 @@ export default function Home() {
               Explore Models
               <ChevronRight className="ml-2 h-4 w-4 animate-bounce" />
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-[#FF7300] text-[#FF7300] hover:bg-[#FF7300] hover:text-white"
-            >
-              Book a Test Ride
-              <Zap className="ml-2 h-4 w-4" />
-            </Button>
+            <Link href="/book-test-ride">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-[#FF7300] text-[#FF7300] hover:bg-[#FF7300] hover:text-white"
+              >
+                Book a Test Ride
+                <Send className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </div>
         </motion.div>
       </section>
