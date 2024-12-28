@@ -5,7 +5,6 @@ const nextConfig = {
         domains: ['images.unsplash.com'],
         unoptimized: process.env.NODE_ENV === 'development',
     },
-    // Enable static optimization where possible
     swcMinify: true,
     poweredByHeader: false,
     async headers() {
@@ -29,9 +28,15 @@ const nextConfig = {
             },
         ]
     },
+    // Ensure environment variables are available during build
     env: {
         NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
         NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    },
+    // Add experimental features for better optimization
+    experimental: {
+        optimizeCss: true,
+        scrollRestoration: true,
     },
 }
 
