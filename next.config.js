@@ -3,7 +3,7 @@ const nextConfig = {
     output: 'standalone',
     images: {
         domains: ['images.unsplash.com'],
-        unoptimized: process.env.NODE_ENV === 'development',
+        unoptimized: true, // Set to true for static export
     },
     swcMinify: true,
     poweredByHeader: false,
