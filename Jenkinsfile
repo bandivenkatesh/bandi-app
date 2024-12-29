@@ -1,9 +1,13 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'NodeJS'  // Configure this in Jenkins Global Tool Configuration
+    }
+
     environment {
-        DOCKER_IMAGE = 'bandi-bikes-app'
-        DOCKER_TAG = 'latest'
+        NODE_ENV = 'development'
+        PORT = '3000'
     }
 
     stages {
@@ -13,47 +17,66 @@ pipeline {
             }
         }
 
+        stage('Node Setup') {
+            steps {
+                bat 'node --version'
+                bat 'npm --version'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                sh 'npm test'
-            }
-        }
-
-        stage('Build Docker Image') {
+        stage('Start Dev Server') {
             steps {
                 script {
-                    docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                    bat '''
+                        start /B npm run dev
+                        @echo off
+                        timeout /t 30 /nobreak
+                    '''
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Health Check') {
             steps {
                 script {
-                    // Deploy to your target environment
-                    // This is an example - modify according to your deployment target
-                    sh """
-                        docker stop ${DOCKER_IMAGE} || true
-                        docker rm ${DOCKER_IMAGE} || true
-                        docker run -d --name ${DOCKER_IMAGE} -p 3000:3000 ${DOCKER_IMAGE}:${DOCKER_TAG}
-                    """
+                    bat '''
+                        @echo off
+                        for /l %%x in (1, 1, 6) do (
+                            curl -f http://localhost:3000/
+                            if !errorlevel! equ 0 (
+                                echo Application is running!
+                                exit /b 0
+                            )
+                            timeout /t 10 /nobreak
+                        )
+                        echo Application failed to start!
+                        exit /b 1
+                    '''
                 }
             }
         }
     }
 
     post {
+        always {
+            script {
+                bat '''
+                    @echo off
+                    for /f "tokens=5" %%a in ('netstat -ano ^| findstr :3000') do taskkill /F /PID %%a
+                '''
+            }
+        }
         success {
-            echo 'Deployment successful!'
+            echo 'Development server test completed successfully!'
         }
         failure {
-            echo 'Deployment failed!'
+            echo 'Development server test failed!'
         }
     }
 }
