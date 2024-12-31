@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                        sudo -u bandi docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
                     """
                 }
             }
@@ -48,9 +48,9 @@ pipeline {
             steps {
                 script {
                     sh """
-                        docker stop ${DOCKER_IMAGE} || true
-                        docker rm ${DOCKER_IMAGE} || true
-                        docker run -d --name ${DOCKER_IMAGE} -p 3000:3000 ${DOCKER_IMAGE}:${DOCKER_TAG}
+                        sudo -u bandi docker stop ${DOCKER_IMAGE} || true
+                        sudo -u bandi docker rm ${DOCKER_IMAGE} || true
+                        sudo -u bandi docker run -d --name ${DOCKER_IMAGE} -p 3000:3000 ${DOCKER_IMAGE}:${DOCKER_TAG}
                         sleep 30
                     """
                 }
