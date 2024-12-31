@@ -10,6 +10,8 @@ pipeline {
     environment {
         NODE_ENV = 'development'
         PORT = '3000'
+        DOCKER_IMAGE = 'bandi-bikes-app'
+        DOCKER_TAG = 'latest'
     }
 
     stages {
@@ -32,13 +34,25 @@ pipeline {
             }
         }
 
-        stage('Start Dev Server') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    sh '''
-                        nohup npm run dev > nohup.out 2>&1
+                    sh """
+                        docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                    """
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    sh """
+                        docker stop ${DOCKER_IMAGE} || true
+                        docker rm ${DOCKER_IMAGE} || true
+                        docker run -d --name ${DOCKER_IMAGE} -p 3000:3000 ${DOCKER_IMAGE}:${DOCKER_TAG}
                         sleep 30
-                    '''
+                    """
                 }
             }
         }
@@ -50,12 +64,12 @@ pipeline {
                         for i in {1..6}
                         do
                             if curl -f http://localhost:3000/; then
-                                echo "Application is running and will remain active!"
+                                echo "Docker container is running and application is accessible!"
                                 exit 0
                             fi
                             sleep 10
                         done
-                        echo "Application failed to start!"
+                        echo "Application failed to start in container!"
                         exit 1
                     '''
                 }
@@ -65,10 +79,10 @@ pipeline {
 
     post {
         success {
-            echo 'Development server test completed successfully! Application remains running.'
+            echo 'Application successfully deployed in Docker container!'
         }
         failure {
-            echo 'Development server test failed!'
+            echo 'Docker deployment failed!'
         }
     }
 }
