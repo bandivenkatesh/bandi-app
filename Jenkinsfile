@@ -11,7 +11,7 @@ pipeline {
         NODE_ENV = 'development'
         PORT = '3000'
         DOCKER_IMAGE = 'bandi-bikes-app'
-        DOCKER_TAG = 'latest'
+        DOCKER_TAG = 'cursor-feature'
     }
 
     stages {
