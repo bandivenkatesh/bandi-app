@@ -12,6 +12,8 @@ import { Button } from '@/components/ui/button';
 import { AboutSection } from '@/components/sections/AboutSection';
 import Image from 'next/image';
 import Link from 'next/link';
+import { CustomCursor } from '@/components/CustomCursor';
+import { ClientOnly } from '@/components/providers/ClientOnly';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -71,8 +73,8 @@ export default function RootLayout({
   ];
 
   return (
-    <html lang="en" className="dark">
-      <body className={inter.className}>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <body className={`${inter.className} cursor-none`}>
         {/* Navbar */}
         <Navbar />
 
@@ -172,6 +174,9 @@ export default function RootLayout({
             </div>
           </section>
         </main>
+        <ClientOnly>
+          <CustomCursor />
+        </ClientOnly>
       </body>
     </html>
   );
