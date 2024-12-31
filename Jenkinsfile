@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        nohup npm run dev &
+                        nohup npm run dev > nohup.out 2>&1
                         sleep 30
                     '''
                 }
@@ -50,11 +50,13 @@ pipeline {
                         for i in {1..6}
                         do
                             if curl -f http://localhost:3000/; then
-                                echo "Application is running and will continue running!"
-                                break
+                                echo "Application is running and will remain active!"
+                                exit 0
                             fi
                             sleep 10
                         done
+                        echo "Application failed to start!"
+                        exit 1
                     '''
                 }
             }
@@ -63,10 +65,10 @@ pipeline {
 
     post {
         success {
-            echo 'Development server test completed successfully! Application is still running.'
+            echo 'Development server test completed successfully! Application remains running.'
         }
         failure {
-            echo 'Development server test failed! Check the application logs.'
+            echo 'Development server test failed!'
         }
     }
 }
