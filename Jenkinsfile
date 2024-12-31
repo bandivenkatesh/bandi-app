@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'k8s-slave'
+    }
 
     tools {
         nodejs 'NodeJS'  // Configure this in Jenkins Global Tool Configuration
@@ -19,24 +21,23 @@ pipeline {
 
         stage('Node Setup') {
             steps {
-                bat 'node --version'
-                bat 'npm --version'
+                sh 'node --version'
+                sh 'npm --version'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
+                sh 'npm install'
             }
         }
 
         stage('Start Dev Server') {
             steps {
                 script {
-                    bat '''
-                        start /B npm run dev
-                        @echo off
-                        timeout /t 30 /nobreak
+                    sh '''
+                        nohup npm run dev &
+                        sleep 30
                     '''
                 }
             }
@@ -45,18 +46,17 @@ pipeline {
         stage('Health Check') {
             steps {
                 script {
-                    bat '''
-                        @echo off
-                        for /l %%x in (1, 1, 6) do (
-                            curl -f http://localhost:3000/
-                            if !errorlevel! equ 0 (
-                                echo Application is running!
-                                exit /b 0
-                            )
-                            timeout /t 10 /nobreak
-                        )
-                        echo Application failed to start!
-                        exit /b 1
+                    sh '''
+                        for i in {1..6}
+                        do
+                            if curl -f http://localhost:3000/; then
+                                echo "Application is running!"
+                                exit 0
+                            fi
+                            sleep 10
+                        done
+                        echo "Application failed to start!"
+                        exit 1
                     '''
                 }
             }
@@ -66,10 +66,7 @@ pipeline {
     post {
         always {
             script {
-                bat '''
-                    @echo off
-                    for /f "tokens=5" %%a in ('netstat -ano ^| findstr :3000') do taskkill /F /PID %%a
-                '''
+                sh 'pkill -f "node.*dev"'
             }
         }
         success {
