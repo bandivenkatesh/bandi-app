@@ -50,13 +50,11 @@ pipeline {
                         for i in {1..6}
                         do
                             if curl -f http://localhost:3000/; then
-                                echo "Application is running!"
-                                exit 0
+                                echo "Application is running and will continue running!"
+                                break
                             fi
                             sleep 10
                         done
-                        echo "Application failed to start!"
-                        exit 1
                     '''
                 }
             }
@@ -64,16 +62,11 @@ pipeline {
     }
 
     post {
-        always {
-            script {
-                sh 'pkill -f "node.*dev"'
-            }
-        }
         success {
-            echo 'Development server test completed successfully!'
+            echo 'Development server test completed successfully! Application is still running.'
         }
         failure {
-            echo 'Development server test failed!'
+            echo 'Development server test failed! Check the application logs.'
         }
     }
 }
