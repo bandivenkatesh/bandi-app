@@ -1,33 +1,53 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { motion, useSpring, useMotionValue } from 'framer-motion';
 
-export function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+const CustomCursor = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
 
   useEffect(() => {
-    const updatePosition = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+    const updateCursor = (e: MouseEvent) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
     };
 
-    window.addEventListener('mousemove', updatePosition);
-    return () => window.removeEventListener('mousemove', updatePosition);
-  }, []);
+    const showCursor = () => setIsVisible(true);
+    const hideCursor = () => setIsVisible(false);
+
+    document.addEventListener('mousemove', updateCursor);
+    document.addEventListener('mouseenter', showCursor);
+    document.addEventListener('mouseleave', hideCursor);
+
+    return () => {
+      document.removeEventListener('mousemove', updateCursor);
+      document.removeEventListener('mouseenter', showCursor);
+      document.removeEventListener('mouseleave', hideCursor);
+    };
+  }, [cursorX, cursorY]);
+
+  if (!isVisible) return null;
 
   return (
     <>
-      <div
-        className="custom-cursor cursor-dot"
+      <motion.div
+        className="cursor-outer"
         style={{
-          transform: `translate(${position.x - 8}px, ${position.y - 8}px)`,
+          x: cursorX,
+          y: cursorY,
         }}
       />
-      <div
-        className="custom-cursor cursor-outline"
+      <motion.div
+        className="cursor-inner"
         style={{
-          transform: `translate(${position.x}px, ${position.y}px)`,
+          x: cursorX,
+          y: cursorY,
         }}
       />
     </>
   );
-}
+};
+
+export default CustomCursor;

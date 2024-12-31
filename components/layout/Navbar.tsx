@@ -24,64 +24,22 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="fixed w-full z-50 bg-black/90 backdrop-blur-sm">
+    <nav className="fixed top-0 w-full z-50 bg-black/50 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center space-x-2">
-            <Bike className="h-8 w-8 text-[#FF7300]" />
-            <span className="text-2xl font-bold text-white">BANDI</span>
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="text-white font-bold text-xl">
+            BANDI
           </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-gray-300 hover:text-[#FF7300] transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <UserMenu />
-          </div>
-
-          {/* Mobile Navigation Toggle */}
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              className="text-white"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {isOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </Button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Menu */}
-        <div
-          className={cn(
-            'md:hidden',
-            isOpen ? 'block' : 'hidden'
-          )}
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="block px-3 py-2 text-gray-300 hover:text-[#FF7300] transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <div className="mt-4">
-              <UserMenu />
-            </div>
+          <div className="hidden md:flex space-x-8">
+            <Link href="/models" className="text-white hover:text-[#FF7300] transition-colors">
+              Models
+            </Link>
+            <Link href="/about" className="text-white hover:text-[#FF7300] transition-colors">
+              About
+            </Link>
+            <Link href="/contact" className="text-white hover:text-[#FF7300] transition-colors">
+              Contact
+            </Link>
           </div>
         </div>
       </div>

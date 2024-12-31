@@ -6,11 +6,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
-const CustomCursor = dynamic(
-  () => import('@/components/CustomCursor').then(mod => ({ default: mod.CustomCursor })),
-  { ssr: false }
-);
-
 export default function Home() {
   return (
     <div className="min-h-screen bg-black">

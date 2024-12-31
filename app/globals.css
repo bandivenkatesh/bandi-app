@@ -29,18 +29,10 @@
 
 @layer base {
   * {
-    @apply border-border;
-    cursor: none !important;
+    @apply border-border cursor-none;
   }
   body {
-    @apply bg-background text-foreground;
-    cursor: none !important;
-  }
-  a, button, [role="button"], input, textarea {
-    cursor: none !important;
-  }
-  input, textarea {
-    cursor: text !important;
+    @apply bg-background text-foreground cursor-none;
   }
 }
 
@@ -54,64 +46,76 @@
   }
 }
 
-/* Custom cursor styles */
-.custom-cursor {
+/* Simplified cursor styles */
+.cursor-dot {
   position: fixed;
   pointer-events: none;
   z-index: 9999;
-  top: 0;
-  left: 0;
-  will-change: transform;
+  width: 12px;
+  height: 12px;
+  background: #FF7300;
+  border-radius: 50%;
+  margin-left: -6px;
+  margin-top: -6px;
+  mix-blend-mode: difference;
 }
 
-.cursor-dot {
+/* Custom cursor styles */
+.cursor-outer {
+  position: fixed;
+  left: -20px;
+  top: -20px;
+  pointer-events: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #FF7300;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 999999;
+}
+
+.cursor-inner {
+  position: fixed;
+  left: -4px;
+  top: -4px;
+  pointer-events: none;
+  border-radius: 50%;
   width: 8px;
   height: 8px;
-  background-color: #FF7300;
-  border-radius: 50%;
-  box-shadow: 0 0 20px 2px rgba(255, 115, 0, 0.4);
+  background: #FF7300;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 999999;
+  box-shadow: 0 0 10px rgba(255, 115, 0, 0.5);
 }
 
-.cursor-outline {
-  width: 32px;
-  height: 32px;
-  border: 2px solid #FF7300;
-  border-radius: 50%;
-  margin-left: -16px;
-  margin-top: -16px;
+/* Interactive states */
+a:hover ~ .cursor-outer,
+button:hover ~ .cursor-outer {
+  transform: scale(1.5);
+  background-color: rgba(255, 115, 0, 0.1);
 }
 
-/* Cursor trail effect */
-.cursor-trail {
-  @apply fixed pointer-events-none w-2 h-2 rounded-full;
-  background: rgba(255, 115, 0, 0.6);
-  transition: width 0.2s, height 0.2s;
+a:hover ~ .cursor-inner,
+button:hover ~ .cursor-inner {
+  transform: scale(0.5);
 }
 
-/* Interactive element styles */
-a, button, [role="button"] {
+/* Hide cursor on mobile */
+@media (max-width: 768px) {
+  .cursor-dot {
+    display: none;
+  }
+  .cursor-outer,
+  .cursor-inner {
+    display: none;
+  }
+}
+
+/* Default cursor behavior */
+* {
   cursor: none;
 }
 
-a:hover ~ .cursor-dot,
-button:hover ~ .cursor-dot,
-[role="button"]:hover ~ .cursor-dot {
-  transform: scale(1.5);
-}
-
-a:hover ~ .cursor-outline,
-button:hover ~ .cursor-outline,
-[role="button"]:hover ~ .cursor-outline {
-  transform: scale(1.2) translate(-40%, -40%);
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1) translate(-50%, -50%);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.1) translate(-45%, -45%);
-    opacity: 0.5;
-  }
+input, textarea, select {
+  cursor: text !important;
 }
