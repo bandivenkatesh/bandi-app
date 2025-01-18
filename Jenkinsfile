@@ -9,7 +9,7 @@ pipeline {
 
     environment {
         NODE_ENV = 'development'
-        PORT = '3000'
+        PORT = '2000'
         DOCKER_IMAGE = 'bandi-bikes-app'
         DOCKER_TAG = 'cursor-feature'
     }
