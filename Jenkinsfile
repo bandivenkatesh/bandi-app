@@ -3,8 +3,13 @@ pipeline {
         label 'k8s-slave'
     }
 
+    options {
+        timeout(time: 1, unit: 'HOURS')
+        disableConcurrentBuilds()
+    }
+
     tools {
-        nodejs 'NodeJS'  // Configure this in Jenkins Global Tool Configuration
+        nodejs 'NodeJS 18'  // Configure this in Jenkins Global Tool Configuration
     }
 
     environment {
@@ -16,6 +21,8 @@ pipeline {
             string(credentialsId: 'NEXT_PUBLIC_SUPABASE_URL', variable: 'NEXT_PUBLIC_SUPABASE_URL'),
             string(credentialsId: 'NEXT_PUBLIC_SUPABASE_ANON_KEY', variable: 'NEXT_PUBLIC_SUPABASE_ANON_KEY')
         ])
+        NODE_OPTIONS = '--max-old-space-size=4096'
+        NPM_CONFIG_LOGLEVEL = 'verbose'
     }
 
     stages {
@@ -33,8 +40,21 @@ pipeline {
         }
 
         stage('Install Dependencies') {
+            options {
+                timeout(time: 5, unit: 'MINUTES')
+            }
             steps {
-                sh 'npm install'
+                script {
+                    try {
+                        sh '''
+                            npm cache clean --force
+                            npm install --no-audit --no-fund --verbose
+                        '''
+                    } catch (Exception e) {
+                        echo "npm install failed: ${e.message}"
+                        error "Failed to install dependencies"
+                    }
+                }
             }
         }
 
@@ -92,11 +112,17 @@ pipeline {
     }
 
     post {
+        always {
+            cleanWs()
+        }
         success {
             echo 'Application successfully deployed in Docker container!'
         }
         failure {
             echo 'Docker deployment failed!'
+        }
+        aborted {
+            echo 'Pipeline was aborted'
         }
     }
 }

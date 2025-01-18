@@ -1,20 +1,20 @@
-FROM node:16
-
+FROM node:18 AS deps
 WORKDIR /app
-
 COPY package*.json ./
+RUN npm ci
 
-RUN npm install
-
-# Copy entire project including .env.local
+FROM node:18 AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN npm run build
 
-# Set environment variables
-ENV NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
-ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+FROM node:18 AS runner
+WORKDIR /app
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 ENV PORT=2000
-
 EXPOSE 2000
-
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
 
