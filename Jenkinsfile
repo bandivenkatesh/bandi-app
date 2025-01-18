@@ -12,6 +12,8 @@ pipeline {
         PORT = '2000'
         DOCKER_IMAGE = 'bandi-bikes-app'
         DOCKER_TAG = 'latest'
+        NEXT_PUBLIC_SUPABASE_URL = credentials('NEXT_PUBLIC_SUPABASE_URL')
+        NEXT_PUBLIC_SUPABASE_ANON_KEY = credentials('NEXT_PUBLIC_SUPABASE_ANON_KEY')
     }
 
     stages {
@@ -50,7 +52,12 @@ pipeline {
                     sh """
                         sudo -u bandi docker stop ${DOCKER_IMAGE} || true
                         sudo -u bandi docker rm ${DOCKER_IMAGE} || true
-                        sudo -u bandi docker run -d --name ${DOCKER_IMAGE} -p 2000:2000 ${DOCKER_IMAGE}:${DOCKER_TAG}
+                        sudo -u bandi docker run -d \
+                            --name ${DOCKER_IMAGE} \
+                            -p 2000:2000 \
+                            -e NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL} \
+                            -e NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY} \
+                            ${DOCKER_IMAGE}:${DOCKER_TAG}
                         sleep 30
                     """
                 }
@@ -86,3 +93,4 @@ pipeline {
         }
     }
 }
+

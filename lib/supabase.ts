@@ -2,30 +2,21 @@ import { createClient } from '@supabase/supabase-js';
 import { Bike, TestRideBooking, UserProfile } from './supabase-types';
 
 // Validate environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing Supabase environment variables');
-  // Provide fallback values for development
-  throw new Error('Please check your .env.local file');
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  console.error('Missing environment variables for Supabase configuration')
+  console.log('NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+  console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 }
 
-try {
-  // Validate URL
-  new URL(supabaseUrl);
-} catch (error) {
-  throw new Error('Invalid Supabase URL format');
-}
-
-// Add error handling for createClient
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-try {
-  // Additional initialization if needed
-} catch (error) {
-  console.error('Failed to initialize Supabase client:', error);
-  throw error;
-}
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+  {
+    auth: {
+      persistSession: false
+    }
+  }
+);
 
 export interface ContactMessage {
   name: string;
