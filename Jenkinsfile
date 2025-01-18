@@ -12,8 +12,10 @@ pipeline {
         PORT = '2000'
         DOCKER_IMAGE = 'bandi-bikes-app'
         DOCKER_TAG = 'latest'
-        NEXT_PUBLIC_SUPABASE_URL = credentials('NEXT_PUBLIC_SUPABASE_URL')
-        NEXT_PUBLIC_SUPABASE_ANON_KEY = credentials('NEXT_PUBLIC_SUPABASE_ANON_KEY')
+        SUPABASE_CREDS = credentials([
+            string(credentialsId: 'NEXT_PUBLIC_SUPABASE_URL', variable: 'NEXT_PUBLIC_SUPABASE_URL'),
+            string(credentialsId: 'NEXT_PUBLIC_SUPABASE_ANON_KEY', variable: 'NEXT_PUBLIC_SUPABASE_ANON_KEY')
+        ])
     }
 
     stages {
@@ -49,17 +51,22 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh """
-                        sudo -u bandi docker stop ${DOCKER_IMAGE} || true
-                        sudo -u bandi docker rm ${DOCKER_IMAGE} || true
-                        sudo -u bandi docker run -d \
-                            --name ${DOCKER_IMAGE} \
-                            -p 2000:2000 \
-                            -e NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL} \
-                            -e NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY} \
-                            ${DOCKER_IMAGE}:${DOCKER_TAG}
-                        sleep 30
-                    """
+                    withCredentials([
+                        string(credentialsId: 'NEXT_PUBLIC_SUPABASE_URL', variable: 'NEXT_PUBLIC_SUPABASE_URL'),
+                        string(credentialsId: 'NEXT_PUBLIC_SUPABASE_ANON_KEY', variable: 'NEXT_PUBLIC_SUPABASE_ANON_KEY')
+                    ]) {
+                        sh """
+                            sudo -u bandi docker stop ${DOCKER_IMAGE} || true
+                            sudo -u bandi docker rm ${DOCKER_IMAGE} || true
+                            sudo -u bandi docker run -d \
+                                --name ${DOCKER_IMAGE} \
+                                -p 2000:2000 \
+                                -e NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL} \
+                                -e NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY} \
+                                ${DOCKER_IMAGE}:${DOCKER_TAG}
+                            sleep 30
+                        """
+                    }
                 }
             }
         }
