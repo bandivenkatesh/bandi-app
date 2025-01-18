@@ -17,10 +17,6 @@ pipeline {
         PORT = '2000'
         DOCKER_IMAGE = 'bandi-bikes-app'
         DOCKER_TAG = 'latest'
-        SUPABASE_CREDS = credentials([
-            string(credentialsId: 'NEXT_PUBLIC_SUPABASE_URL', variable: 'NEXT_PUBLIC_SUPABASE_URL'),
-            string(credentialsId: 'NEXT_PUBLIC_SUPABASE_ANON_KEY', variable: 'NEXT_PUBLIC_SUPABASE_ANON_KEY')
-        ])
         NODE_OPTIONS = '--max-old-space-size=4096'
         NPM_CONFIG_LOGLEVEL = 'verbose'
     }
