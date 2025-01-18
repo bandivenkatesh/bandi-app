@@ -19,6 +19,7 @@ pipeline {
         DOCKER_TAG = 'latest'
         NODE_OPTIONS = '--max-old-space-size=4096'
         NPM_CONFIG_LOGLEVEL = 'verbose'
+        DOCKER_BUILDKIT = '1'  // Enable Docker BuildKit
     }
 
     stages {
