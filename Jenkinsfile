@@ -4,7 +4,7 @@ pipeline {
     }
 
     options {
-        timeout(time: 1, unit: 'HOURS')
+        timeout(time: 2, unit: 'HOURS')
         disableConcurrentBuilds()
     }
 
@@ -58,9 +58,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh """
+                    sh '''
                         sudo -u bandi docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
-                    """
+                    '''
                 }
             }
         }
@@ -73,7 +73,7 @@ pipeline {
                         string(credentialsId: 'NEXT_PUBLIC_SUPABASE_ANON_KEY', variable: 'NEXT_PUBLIC_SUPABASE_ANON_KEY')
                     ]) {
                         sh """
-                            sudo -u bandi docker stop ${DOCKER_IMAGE} || true
+                            sudo -u bandi docker stop ${DOCKER_IMAGE} || :
                             sudo -u bandi docker rm ${DOCKER_IMAGE} || true
                             sudo -u bandi docker run -d \
                                 --name ${DOCKER_IMAGE} \
