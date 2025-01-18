@@ -8,6 +8,9 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+# Copy env file
+COPY .env.local .env.local
+
+EXPOSE 2000
 
 CMD ["npm", "run", "dev"]
