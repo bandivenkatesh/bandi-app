@@ -9,7 +9,7 @@ pipeline {
 
     environment {
         NODE_ENV = 'development'
-        PORT = '2000'
+        PORT = '2001'
         DOCKER_IMAGE = 'bandi-bikes-app'
         DOCKER_TAG = 'cursor-feature'
     }
@@ -50,7 +50,7 @@ pipeline {
                     sh """
                         sudo -u bandi docker stop ${DOCKER_IMAGE} || true
                         sudo -u bandi docker rm ${DOCKER_IMAGE} || true
-                        sudo -u bandi docker run -d --name ${DOCKER_IMAGE} -p 2000:2000 ${DOCKER_IMAGE}:${DOCKER_TAG}
+                        sudo -u bandi docker run -d --name ${DOCKER_IMAGE} -p 2001:2001 ${DOCKER_IMAGE}:${DOCKER_TAG}
                         sleep 30
                     """
                 }
@@ -63,7 +63,7 @@ pipeline {
                     sh '''
                         for i in {1..6}
                         do
-                            if curl -f http://localhost:2000/; then
+                            if curl -f http://localhost:2001/; then
                                 echo "Docker container is running and application is accessible!"
                                 exit 0
                             fi
