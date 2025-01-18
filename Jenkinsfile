@@ -17,8 +17,6 @@ pipeline {
         PORT = '2000'
         DOCKER_IMAGE = 'bandi-bikes-app'
         DOCKER_TAG = 'latest'
-        NODE_OPTIONS = '--max-old-space-size=4096'
-        NPM_CONFIG_LOGLEVEL = 'verbose'
         DOCKER_BUILDKIT = '1'  // Enable Docker BuildKit
         CONTAINER_NAME = 'bandi-bikes-app'
         DOCKER_NETWORK = 'bandi-network'
@@ -51,15 +49,15 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh '''
+                        sh """
                             # Clean workspace
                             rm -rf node_modules package-lock.json
                             
                             # Configure npm
-                            npm config set registry ${NPM_CONFIG_REGISTRY}
-                            npm config set fetch-retries ${NPM_CONFIG_FETCH_RETRIES}
-                            npm config set fetch-retry-factor ${NPM_CONFIG_FETCH_RETRY_FACTOR}
-                            npm config set timeout ${NPM_CONFIG_TIMEOUT}
+                            npm config set registry "${NPM_CONFIG_REGISTRY}"
+                            npm config set fetch-retries "${NPM_CONFIG_FETCH_RETRIES}"
+                            npm config set fetch-retry-factor "${NPM_CONFIG_FETCH_RETRY_FACTOR}"
+                            npm config set timeout "${NPM_CONFIG_TIMEOUT}"
                             
                             # Install dependencies
                             npm cache clean --force
@@ -77,18 +75,26 @@ pipeline {
                             
                             # List installed packages for debugging
                             npm list --depth=0
-                        '''
-                    } catch (Exception e) {
-                        echo """
-                            npm installation failed with error: ${e.message}
-                            Workspace contents:
-                            $(ls -la)
-                            Node version: $(node -v)
-                            NPM version: $(npm -v)
-                            System memory: $(free -h)
-                            Disk space: $(df -h)
                         """
-                        error "Failed to install dependencies: ${e.message}"
+                    } catch (Exception e) {
+                        def errorMessage = e.getMessage()
+                        def diagnostics = sh(script: """
+                            echo "Workspace contents:"
+                            ls -la
+                            echo "Node version:"
+                            node -v
+                            echo "NPM version:"
+                            npm -v
+                            echo "System memory:"
+                            free -h
+                            echo "Disk space:"
+                            df -h
+                        """, returnStdout: true).trim()
+                        
+                        echo """NPM installation failed with error: ${errorMessage}
+                            Diagnostics:
+                            ${diagnostics}"""
+                        error "Failed to install dependencies: ${errorMessage}"
                     }
                 }
             }
