@@ -9,9 +9,9 @@ pipeline {
 
     environment {
         NODE_ENV = 'development'
-        PORT = '2000'
+        PORT = '3000'
         DOCKER_IMAGE = 'bandi-bikes-app'
-        DOCKER_TAG = 'new'
+        DOCKER_TAG = 'new-one'
     }
 
     stages {
