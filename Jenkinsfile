@@ -12,6 +12,8 @@ pipeline {
         PORT = '3000'
         DOCKER_IMAGE = 'bandi-bikes-app'
         DOCKER_TAG = 'new-one'
+        NEXT_PUBLIC_SUPABASE_URL = credentials('NEXT_PUBLIC_SUPABASE_URL')
+        NEXT_PUBLIC_SUPABASE_ANON_KEY = credentials('NEXT_PUBLIC_SUPABASE_ANON_KEY')
     }
 
     stages {
