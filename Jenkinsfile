@@ -46,7 +46,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'npm run dev'
+                        sh 'npm run build'
                     } catch (Exception e) {
                         error "Build failed: ${e.message}"
                     }
