@@ -9,16 +9,33 @@ export async function GET(request: Request) {
         const requestUrl = new URL(request.url);
         const code = requestUrl.searchParams.get('code');
 
-        if (code) {
-            const cookieStore = cookies();
-            const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
-            await supabase.auth.exchangeCodeForSession(code);
+        if (!code) {
+            throw new Error('No code provided in authentication callback');
         }
 
-        // Redirect to home page after authentication
+        const cookieStore = cookies();
+        const supabase = createRouteHandlerClient({
+            cookies: () => cookieStore,
+            options: {
+                auth: {
+                    autoRefreshToken: true,
+                    persistSession: true
+                }
+            }
+        });
+
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        
+        if (error) {
+            throw error;
+        }
+
         return NextResponse.redirect(new URL('/', request.url));
     } catch (error) {
         console.error('Auth callback error:', error);
-        return NextResponse.redirect(new URL('/auth-error', request.url));
+        // Add error details to the redirect URL
+        const errorUrl = new URL('/auth-error', request.url);
+        errorUrl.searchParams.set('message', (error as Error).message);
+        return NextResponse.redirect(errorUrl);
     }
 }
