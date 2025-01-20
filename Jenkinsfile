@@ -42,6 +42,18 @@ pipeline {
             }
         }
 
+        stage('Build Application') {
+            steps {
+                script {
+                    try {
+                        sh 'npm run build'
+                    } catch (Exception e) {
+                        error "Build failed: ${e.message}"
+                    }
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
