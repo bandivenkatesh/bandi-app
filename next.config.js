@@ -31,6 +31,20 @@ const nextConfig = {
             },
         ]
     },
+    async redirects() {
+        return [
+            {
+                source: '/_error',
+                destination: '/404',
+                permanent: false,
+            },
+            {
+                source: '/_error',
+                destination: '/500',
+                permanent: false,
+            },
+        ];
+    },
     // Ensure environment variables are available during build
     env: {
         PORT: process.env.PORT || '2000',
