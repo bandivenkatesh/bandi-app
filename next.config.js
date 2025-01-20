@@ -50,7 +50,6 @@ const nextConfig = {
         PORT: process.env.PORT || '2000',
         NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
         NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        NODE_ENV: process.env.NODE_ENV || 'production', // Ensure NODE_ENV is set to a standard value
     },
     // Add experimental features for better optimization
     experimental: {
