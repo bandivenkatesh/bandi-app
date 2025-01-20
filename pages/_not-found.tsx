@@ -1,12 +1,1 @@
-
-import { NextPage } from 'next';
-
-const NotFound: NextPage = () => {
-    return (
-        <div>
-            <h1>Page Not Found</h1>
-        </div>
-    );
-};
-
-export default NotFound;
+// This file has been removed to resolve the conflict
