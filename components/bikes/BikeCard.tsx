@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface BikeCardProps {
   bike: BikeModel;
@@ -21,9 +22,11 @@ export function BikeCard({ bike }: BikeCardProps) {
       className="bg-black/50 border border-[#FF7300]/20 group"
     >
       <div className="relative overflow-hidden aspect-video">
-        <img
+        <Image
           src={bike.image}
           alt={bike.name}
+          width={500}
+          height={300}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />

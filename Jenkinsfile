@@ -30,6 +30,12 @@ pipeline {
             }
         }
 
+        stage('Update npm') {
+            steps {
+                sh 'npm install -g npm@latest'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'

@@ -15,13 +15,7 @@ export async function GET(request: Request) {
 
         const cookieStore = cookies();
         const supabase = createRouteHandlerClient({
-            cookies: () => cookieStore,
-            options: {
-                auth: {
-                    autoRefreshToken: true,
-                    persistSession: true
-                }
-            }
+            cookies: () => cookieStore
         });
 
         const { error } = await supabase.auth.exchangeCodeForSession(code);
