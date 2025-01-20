@@ -8,8 +8,8 @@ pipeline {
     }
 
     environment {
-        NODE_ENV = 'development'
-        PORT = '3000'
+        NODE_ENV = 'production'
+        PORT = '2000'
         DOCKER_IMAGE = 'bandi-bikes-app'
         DOCKER_TAG = 'new-one'
         NEXT_PUBLIC_SUPABASE_URL = credentials('NEXT_PUBLIC_SUPABASE_URL')
@@ -70,7 +70,7 @@ pipeline {
                     sh """
                         sudo -u bandi docker stop ${DOCKER_IMAGE} || true
                         sudo -u bandi docker rm ${DOCKER_IMAGE} || true
-                        sudo -u bandi docker run -d --name ${DOCKER_IMAGE} -p 2000:2000 ${DOCKER_IMAGE}:${DOCKER_TAG}
+                        sudo -u bandi docker run -d --name ${DOCKER_IMAGE} -p 2000:2000 ${DOCKER_IMAGE}:${DOCKER_TAG} npm run dev
                         sleep 30
                     """
                 }
