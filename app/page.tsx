@@ -64,10 +64,11 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              className="bg-[#FF7300] hover:bg-[#FF7300]/90 text-white transform-gpu transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#FF7300]/20"
+              variant="gradient"
+              className="relative"
             >
               Explore Models
-              <ChevronRight className="ml-2 h-4 w-4 animate-bounce" />
+              <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
             <Link href="/book-test-ride">
               <Button

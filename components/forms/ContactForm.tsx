@@ -97,7 +97,8 @@ export function ContactForm() {
         >
           <Button 
             type="submit" 
-            className="w-full bg-[#FF7300] hover:bg-[#FF7300]/90 transform-gpu transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#FF7300]/20"
+            variant="gradient"
+            className="w-full"
             disabled={isSubmitting}
           >
             {isSubmitting ? (
@@ -110,7 +111,7 @@ export function ContactForm() {
               </span>
             ) : (
               <>
-                Send Message
+                <span className="relative z-10">Send Message</span>
                 <Send className="ml-2 h-4 w-4 animate-float" />
               </>
             )}
